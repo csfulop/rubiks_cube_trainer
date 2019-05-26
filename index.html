@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <div id="canvas-container" style="text-align: center">
+    <canvas id="myCanvas" width="400" height="400" style="border:1px solid #c3c3c3;" style="display: inline">
+      Your browser does not support the canvas element.
+    </canvas>
+  </div>
+
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    var X = 50;
+    var Y = 150;
+    var SIDE = 50;
+    var TRANSFORM_Z_FACE = [
+      [1, 0],
+      [0, 1]
+    ];
+    var TRANSFORM_Y_FACE = [
+      [1, 0],
+      [0.5, -0.5]
+    ];
+    var TRANSFORM_X_FACE = [
+      [0.5, -0.5],
+      [0, 1]
+    ];
+    var FACE_X = 1;
+    var FACE_Y = 2;
+    var FACE_Z = 3;
+    var TRANSFORMS = {};
+    TRANSFORMS[FACE_X] = TRANSFORM_X_FACE;
+    TRANSFORMS[FACE_Y] = TRANSFORM_Y_FACE;
+    TRANSFORMS[FACE_Z] = TRANSFORM_Z_FACE;
+    var TRANSLATIONS = {};
+    TRANSLATIONS[FACE_Z] = [X, Y];
+    TRANSLATIONS[FACE_Y] = [X, Y];
+    TRANSLATIONS[FACE_X] = [X + 3 * SIDE, Y];
+
+    function mul(vector, matrix) {
+      result = new Array(vector.length);
+      for (var i = 0; i < vector.length; i++) {
+        result[i] = 0;
+        for (var j = 0; j < vector.length; j++) {
+          result[i] += vector[j] * matrix[j][i];
+        }
+      }
+      return result;
+    }
+
+    function translate(v1, v2) {
+      result = new Array(v1.length);
+      for (var i = 0; i < v1.length; i++) {
+        result[i] = v1[i] + v2[i];
+      }
+      return result;
+    }
+
+    function drawCubicle(x, y, color, face = FACE_Z) {
+      transform = TRANSFORMS[face];
+      translation = TRANSLATIONS[face];
+      ctx.beginPath();
+      ctx.lineWidth = "1";
+      ctx.strokStyle = "black";
+      i = x * SIDE;
+      j = y * SIDE;
+      path = [[i, j], [i + SIDE, j], [i + SIDE, j + SIDE], [i, j + SIDE]];
+      transformedPath = path.map(function (v) { return translate(mul(v, transform), translation); });
+      ctx.moveTo(transformedPath[0][0], transformedPath[0][1]);
+      for (var i = 1; i < transformedPath.length; i++) {
+        ctx.lineTo(transformedPath[i][0], transformedPath[i][1]);
+      }
+      ctx.closePath();
+      ctx.stroke();
+      if (color) {
+        ctx.fillStyle = color;
+        ctx.fill();
+      }
+    }
+
+    for (var x = 0; x < 3; x++) {
+      for (var y = 0; y < 3; y++) {
+        drawCubicle(x, y, "green", FACE_Y);
+        drawCubicle(x, y, "red", FACE_Z);
+        drawCubicle(x, y, "white", FACE_X);
+      }
+    }
+  </script>
+
+</body>
+
+</html>
