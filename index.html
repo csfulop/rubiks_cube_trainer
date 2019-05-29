@@ -1,12 +1,74 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+  <style>
+    button {
+      border: 1px solid grey;
+      color: white;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 4px;
+      cursor: pointer;
+    }
+
+    #red-button {
+      background-color: red;
+    }
+
+    #orange-button {
+      background-color: orange;
+    }
+
+    #green-button {
+      background-color: green;
+    }
+
+    #blue-button {
+      background-color: blue;
+    }
+
+    #white-button {
+      background-color: white;
+      color: darkslategrey;
+    }
+
+    #yellow-button {
+      background-color: yellow;
+      color: darkslategrey;
+    }
+
+    #buttons .back-color {
+      text-decoration: underline;
+      border: 3px solid lime;
+    }
+
+    #buttons .wrong {
+      text-decoration: line-through;
+      border: 3px solid maroon;
+    }
+  </style>
+</head>
+
 <body>
 
   <div id="canvas-container" style="text-align: center">
-    <canvas id="myCanvas" width="300" height="300" style="border:1px solid #c3c3c3;" style="display: inline">
-      Your browser does not support the canvas element.
-    </canvas>
+    <p id="buttons">
+      <button id="red-button" onclick="showSolution(this)">Red</button>
+      <button id="orange-button" onclick="showSolution(this)">Orange</button>
+      <button id="green-button" onclick="showSolution(this)">Green</button>
+      <button id="blue-button" onclick="showSolution(this)">Blue</button>
+      <button id="white-button" onclick="showSolution(this)">White</button>
+      <button id="yellow-button" onclick="showSolution(this)">Yellow</button>
+    </p>
+    <p>
+      <canvas id="myCanvas" width="300" height="300" style="border:1px solid #c3c3c3;" style="display: inline">
+        Your browser does not support the canvas element.
+      </canvas>
+    </p>
   </div>
 
   <script>
@@ -38,13 +100,13 @@
     TRANSFORMS[FACE_Y] = TRANSFORM_Y_FACE;
     TRANSFORMS[FACE_Z] = TRANSFORM_Z_FACE;
 
-    var RED = "red";
-    var ORANGE = "orange";
-    var BLUE = "blue";
-    var GREEN = "green";
-    var WHITE = "white";
-    var YELLOW = "yellow";
-    var GREY = "grey";
+    var RED = 0;
+    var ORANGE = 1;
+    var BLUE = 2;
+    var GREEN = 3;
+    var WHITE = 4;
+    var YELLOW = 5;
+    var GREY = 6;
 
     var CORNERS = [
       [WHITE, GREEN, ORANGE],
@@ -56,6 +118,17 @@
       [YELLOW, BLUE, ORANGE],
       [YELLOW, ORANGE, GREEN]
     ];
+
+    var COLORS = ["red", "orange", "blue", "green", "white", "yellow", "grey"];
+    var COLOR_CSS = ["red", "orange", "blue", "green", "white", "yellow"];
+
+    function showSolution(element) {
+      var solution = document.getElementById(SOLUTION_ID);
+      solution.className = "back-color";
+      if (element != solution) {
+        element.className = "wrong";
+      }
+    }
 
     function getRandomInt(max) {
       min = 0;
@@ -98,17 +171,18 @@
 
     for (var x = 0; x < 3; x++) {
       for (var y = 0; y < 3; y++) {
-        drawCubicle(x, y, GREY, FACE_Y);
-        drawCubicle(x, y, GREY, FACE_Z);
-        drawCubicle(x, y, GREY, FACE_X);
+        drawCubicle(x, y, COLORS[GREY], FACE_Y);
+        drawCubicle(x, y, COLORS[GREY], FACE_Z);
+        drawCubicle(x, y, COLORS[GREY], FACE_X);
       }
     }
 
     corner = CORNERS[getRandomInt(CORNERS.length)];
     rotation = getRandomInt(corner.length);
-    drawCubicle(2, 0, corner[rotation], FACE_X);
-    drawCubicle(2, 2, corner[(rotation + 1) % corner.length], FACE_Y);
-    // drawCubicle(2,2,corner[(rotation+2)%corner.length],FACE_Z);
+    drawCubicle(2, 0, COLORS[corner[rotation]], FACE_X);
+    drawCubicle(2, 2, COLORS[corner[(rotation + 1) % corner.length]], FACE_Y);
+    backColor = corner[(rotation + 2) % corner.length];
+    SOLUTION_ID = COLOR_CSS[backColor] + "-button";
   </script>
 
 </body>
