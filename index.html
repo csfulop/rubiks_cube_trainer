@@ -4,7 +4,7 @@
 <body>
 
   <div id="canvas-container" style="text-align: center">
-    <canvas id="myCanvas" width="400" height="400" style="border:1px solid #c3c3c3;" style="display: inline">
+    <canvas id="myCanvas" width="300" height="300" style="border:1px solid #c3c3c3;" style="display: inline">
       Your browser does not support the canvas element.
     </canvas>
   </div>
@@ -12,8 +12,8 @@
   <script>
     var canvas = document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
-    var X = 50;
-    var Y = 150;
+    var X = 40;
+    var Y = 110;
     var SIDE = 50;
     var TRANSFORM_Z_FACE = [
       [1, 0],
@@ -37,6 +37,30 @@
     TRANSFORMS[FACE_X] = TRANSFORM_X_FACE;
     TRANSFORMS[FACE_Y] = TRANSFORM_Y_FACE;
     TRANSFORMS[FACE_Z] = TRANSFORM_Z_FACE;
+
+    var RED = "red";
+    var ORANGE = "orange";
+    var BLUE = "blue";
+    var GREEN = "green";
+    var WHITE = "white";
+    var YELLOW = "yellow";
+    var GREY = "grey";
+
+    var CORNERS = [
+      [WHITE, GREEN, ORANGE],
+      [WHITE, ORANGE, BLUE],
+      [WHITE, BLUE, RED],
+      [WHITE, RED, GREEN],
+      [YELLOW, GREEN, RED],
+      [YELLOW, RED, BLUE],
+      [YELLOW, BLUE, ORANGE],
+      [YELLOW, ORANGE, GREEN]
+    ];
+
+    function getRandomInt(max) {
+      min = 0;
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
 
     function mul(vector, matrix) {
       vector.push(1);
@@ -74,11 +98,17 @@
 
     for (var x = 0; x < 3; x++) {
       for (var y = 0; y < 3; y++) {
-        drawCubicle(x, y, "green", FACE_Y);
-        drawCubicle(x, y, "red", FACE_Z);
-        drawCubicle(x, y, "white", FACE_X);
+        drawCubicle(x, y, GREY, FACE_Y);
+        drawCubicle(x, y, GREY, FACE_Z);
+        drawCubicle(x, y, GREY, FACE_X);
       }
     }
+
+    corner = CORNERS[getRandomInt(CORNERS.length)];
+    rotation = getRandomInt(corner.length);
+    drawCubicle(2, 0, corner[rotation], FACE_X);
+    drawCubicle(2, 2, corner[(rotation + 1) % corner.length], FACE_Y);
+    // drawCubicle(2,2,corner[(rotation+2)%corner.length],FACE_Z);
   </script>
 
 </body>
