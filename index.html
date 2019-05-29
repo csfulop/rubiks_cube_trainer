@@ -17,15 +17,18 @@
     var SIDE = 50;
     var TRANSFORM_Z_FACE = [
       [1, 0],
-      [0, 1]
+      [0, 1],
+      [X, Y]
     ];
     var TRANSFORM_Y_FACE = [
       [1, 0],
-      [0.5, -0.5]
+      [0.5, -0.5],
+      [X, Y]
     ];
     var TRANSFORM_X_FACE = [
       [0.5, -0.5],
-      [0, 1]
+      [0, 1],
+      [X + 3 * SIDE, Y]
     ];
     var FACE_X = 1;
     var FACE_Y = 2;
@@ -34,14 +37,12 @@
     TRANSFORMS[FACE_X] = TRANSFORM_X_FACE;
     TRANSFORMS[FACE_Y] = TRANSFORM_Y_FACE;
     TRANSFORMS[FACE_Z] = TRANSFORM_Z_FACE;
-    var TRANSLATIONS = {};
-    TRANSLATIONS[FACE_Z] = [X, Y];
-    TRANSLATIONS[FACE_Y] = [X, Y];
-    TRANSLATIONS[FACE_X] = [X + 3 * SIDE, Y];
 
     function mul(vector, matrix) {
-      result = new Array(vector.length);
-      for (var i = 0; i < vector.length; i++) {
+      vector.push(1);
+      columns = matrix[0].length;
+      result = new Array(columns);
+      for (var i = 0; i < columns; i++) {
         result[i] = 0;
         for (var j = 0; j < vector.length; j++) {
           result[i] += vector[j] * matrix[j][i];
@@ -50,24 +51,15 @@
       return result;
     }
 
-    function translate(v1, v2) {
-      result = new Array(v1.length);
-      for (var i = 0; i < v1.length; i++) {
-        result[i] = v1[i] + v2[i];
-      }
-      return result;
-    }
-
     function drawCubicle(x, y, color, face = FACE_Z) {
       transform = TRANSFORMS[face];
-      translation = TRANSLATIONS[face];
       ctx.beginPath();
       ctx.lineWidth = "1";
       ctx.strokStyle = "black";
       i = x * SIDE;
       j = y * SIDE;
       path = [[i, j], [i + SIDE, j], [i + SIDE, j + SIDE], [i, j + SIDE]];
-      transformedPath = path.map(function (v) { return translate(mul(v, transform), translation); });
+      transformedPath = path.map(function (v) { return mul(v, transform); });
       ctx.moveTo(transformedPath[0][0], transformedPath[0][1]);
       for (var i = 1; i < transformedPath.length; i++) {
         ctx.lineTo(transformedPath[i][0], transformedPath[i][1]);
