@@ -3,28 +3,28 @@ var ctx = canvas.getContext("2d");
 var X = 40;
 var Y = 110;
 var SIDE = 50;
-var TRANSFORM_Z_FACE = [
+var TRANSFORM_F_FACE = [
   [1, 0],
   [0, 1],
   [X, Y]
 ];
-var TRANSFORM_Y_FACE = [
+var TRANSFORM_U_FACE = [
   [1, 0],
   [0.5, -0.5],
   [X, Y]
 ];
-var TRANSFORM_X_FACE = [
+var TRANSFORM_R_FACE = [
   [0.5, -0.5],
   [0, 1],
   [X + 3 * SIDE, Y]
 ];
-var FACE_X = 1;
-var FACE_Y = 2;
-var FACE_Z = 3;
+var FACE_R = 1;
+var FACE_U = 2;
+var FACE_F = 3;
 var TRANSFORMS = {};
-TRANSFORMS[FACE_X] = TRANSFORM_X_FACE;
-TRANSFORMS[FACE_Y] = TRANSFORM_Y_FACE;
-TRANSFORMS[FACE_Z] = TRANSFORM_Z_FACE;
+TRANSFORMS[FACE_R] = TRANSFORM_R_FACE;
+TRANSFORMS[FACE_U] = TRANSFORM_U_FACE;
+TRANSFORMS[FACE_F] = TRANSFORM_F_FACE;
 
 var RED = 0;
 var ORANGE = 1;
@@ -128,7 +128,7 @@ function mul(vector, matrix) {
   return result;
 }
 
-function drawCubicle(x, y, color, face = FACE_Z) {
+function drawCubicle(x, y, color, face) {
   transform = TRANSFORMS[face];
   ctx.beginPath();
   ctx.lineWidth = "1";
@@ -157,9 +157,9 @@ function getRandomInt(max) {
 function drawGreyCube(params) {
   for (var x = 0; x < 3; x++) {
     for (var y = 0; y < 3; y++) {
-      drawCubicle(x, y, COLORS[GREY], FACE_Y);
-      drawCubicle(x, y, COLORS[GREY], FACE_Z);
-      drawCubicle(x, y, COLORS[GREY], FACE_X);
+      drawCubicle(x, y, COLORS[GREY], FACE_U);
+      drawCubicle(x, y, COLORS[GREY], FACE_F);
+      drawCubicle(x, y, COLORS[GREY], FACE_R);
     }
   }
 }
@@ -167,8 +167,8 @@ function drawGreyCube(params) {
 function generateQuiz() {
   corner = CORNERS[getRandomInt(CORNERS.length)];
   rotation = getRandomInt(corner.length);
-  drawCubicle(2, 0, COLORS[corner[rotation]], FACE_X);
-  drawCubicle(2, 2, COLORS[corner[(rotation + 1) % corner.length]], FACE_Y);
+  drawCubicle(2, 0, COLORS[corner[rotation]], FACE_R);
+  drawCubicle(2, 2, COLORS[corner[(rotation + 1) % corner.length]], FACE_U);
   backColor = corner[(rotation + 2) % corner.length];
   SOLUTION_ID = COLOR_CSS[backColor] + "-button";
 }
