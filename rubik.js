@@ -48,7 +48,11 @@ var CORNERS = [
 var COLORS = ["red", "orange", "blue", "green", "white", "yellow", "grey"];
 var COLOR_CSS = ["red", "orange", "blue", "green", "white", "yellow"];
 
-var STATS = { "total": 0, "correct": 0 };
+var stats = { "total": 0, "correct": 0 };
+
+var BUTTONS = COLOR_CSS.map(function (x) { return document.getElementById(x + "-button"); });
+var NEXT_QUIZ_DELAY_MS = 1000;
+var timer;
 
 function setCookie(cname, cvalue, exdays = 60) {
   var d = new Date();
@@ -73,34 +77,39 @@ function getCookie(cname) {
 }
 
 function updateStats() {
-  document.getElementById("correct").textContent = STATS.correct;
-  document.getElementById("total").textContent = STATS.total;
+  document.getElementById("correct").textContent = stats.correct;
+  document.getElementById("total").textContent = stats.total;
 }
 
 function loadStats() {
   var COOKIE = getCookie("rubik");
   if (COOKIE) {
-    STATS = JSON.parse(COOKIE);
+    stats = JSON.parse(COOKIE);
   }
   updateStats();
 }
 
 function saveStats() {
-  setCookie("rubik", JSON.stringify(STATS));
+  setCookie("rubik", JSON.stringify(stats));
 }
 
 function showSolution(element) {
-  STATS.total++;
+  stats.total++;
   var solution = document.getElementById(SOLUTION_ID);
-  solution.className = "back-color";
+  solution.className = "correct";
   if (element != solution) {
     element.className = "wrong";
   }
   else {
-    STATS.correct++;
+    stats.correct++;
   }
   saveStats();
   updateStats();
+  timer = setTimeout(nextQuiz, NEXT_QUIZ_DELAY_MS);
+}
+
+function resetButtons() {
+  BUTTONS.forEach(function (x) { x.className = ""; });
 }
 
 function mul(vector, matrix) {
@@ -142,19 +151,30 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-loadStats();
-
-for (var x = 0; x < 3; x++) {
-  for (var y = 0; y < 3; y++) {
-    drawCubicle(x, y, COLORS[GREY], FACE_Y);
-    drawCubicle(x, y, COLORS[GREY], FACE_Z);
-    drawCubicle(x, y, COLORS[GREY], FACE_X);
+function drawGreyCube(params) {
+  for (var x = 0; x < 3; x++) {
+    for (var y = 0; y < 3; y++) {
+      drawCubicle(x, y, COLORS[GREY], FACE_Y);
+      drawCubicle(x, y, COLORS[GREY], FACE_Z);
+      drawCubicle(x, y, COLORS[GREY], FACE_X);
+    }
   }
 }
 
-corner = CORNERS[getRandomInt(CORNERS.length)];
-rotation = getRandomInt(corner.length);
-drawCubicle(2, 0, COLORS[corner[rotation]], FACE_X);
-drawCubicle(2, 2, COLORS[corner[(rotation + 1) % corner.length]], FACE_Y);
-backColor = corner[(rotation + 2) % corner.length];
-SOLUTION_ID = COLOR_CSS[backColor] + "-button";
+function generateQuiz() {
+  corner = CORNERS[getRandomInt(CORNERS.length)];
+  rotation = getRandomInt(corner.length);
+  drawCubicle(2, 0, COLORS[corner[rotation]], FACE_X);
+  drawCubicle(2, 2, COLORS[corner[(rotation + 1) % corner.length]], FACE_Y);
+  backColor = corner[(rotation + 2) % corner.length];
+  SOLUTION_ID = COLOR_CSS[backColor] + "-button";
+}
+
+function nextQuiz() {
+  resetButtons();
+  generateQuiz();
+}
+
+loadStats();
+drawGreyCube();
+generateQuiz();
