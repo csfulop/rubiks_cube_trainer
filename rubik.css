@@ -1,0 +1,47 @@
+button {
+  border: 1px solid grey;
+  color: white;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 4px;
+  cursor: pointer;
+}
+
+#red-button {
+  background-color: red;
+}
+
+#orange-button {
+  background-color: orange;
+}
+
+#green-button {
+  background-color: green;
+}
+
+#blue-button {
+  background-color: blue;
+}
+
+#white-button {
+  background-color: white;
+  color: darkslategrey;
+}
+
+#yellow-button {
+  background-color: yellow;
+  color: darkslategrey;
+}
+
+#buttons .back-color {
+  text-decoration: underline;
+  border: 3px solid lime;
+}
+
+#buttons .wrong {
+  text-decoration: line-through;
+  border: 3px solid maroon;
+}
