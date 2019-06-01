@@ -105,6 +105,9 @@ function showSolution(element) {
   }
   saveStats();
   updateStats();
+  if (timer) {
+    clearTimeout(timer);
+  }
   timer = setTimeout(nextQuiz, NEXT_QUIZ_DELAY_MS);
 }
 
