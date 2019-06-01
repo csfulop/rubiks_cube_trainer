@@ -48,17 +48,59 @@ var CORNERS = [
 var COLORS = ["red", "orange", "blue", "green", "white", "yellow", "grey"];
 var COLOR_CSS = ["red", "orange", "blue", "green", "white", "yellow"];
 
+var STATS = { "total": 0, "correct": 0 };
+
+function setCookie(cname, cvalue, exdays = 60) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function updateStats() {
+  document.getElementById("correct").textContent = STATS.correct;
+  document.getElementById("total").textContent = STATS.total;
+}
+
+function loadStats() {
+  var COOKIE = getCookie("rubik");
+  if (COOKIE) {
+    STATS = JSON.parse(COOKIE);
+  }
+  updateStats();
+}
+
+function saveStats() {
+  setCookie("rubik", JSON.stringify(STATS));
+}
+
 function showSolution(element) {
+  STATS.total++;
   var solution = document.getElementById(SOLUTION_ID);
   solution.className = "back-color";
   if (element != solution) {
     element.className = "wrong";
   }
-}
-
-function getRandomInt(max) {
-  min = 0;
-  return Math.floor(Math.random() * (max - min)) + min;
+  else {
+    STATS.correct++;
+  }
+  saveStats();
+  updateStats();
 }
 
 function mul(vector, matrix) {
@@ -94,6 +136,13 @@ function drawCubicle(x, y, color, face = FACE_Z) {
     ctx.fill();
   }
 }
+
+function getRandomInt(max) {
+  min = 0;
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+loadStats();
 
 for (var x = 0; x < 3; x++) {
   for (var y = 0; y < 3; y++) {
