@@ -96,17 +96,13 @@ function saveStats() {
 function showSolution(element) {
   stats.total++;
   var solution = document.getElementById(SOLUTION_ID);
-  solution.className = "correct";
-  if (element != solution) {
-    element.className = "wrong";
-  }
-  else {
+  if (element == solution) {
     stats.correct++;
   }
   saveStats();
   updateStats();
-  timer = setTimeout(nextQuiz, NEXT_QUIZ_DELAY_MS);
   BUTTONS.forEach(function (x) { x.disabled = true; });
+  nextQuizTimer(element, solution);
 }
 
 function resetButtons() {
@@ -172,6 +168,36 @@ function generateQuiz() {
   drawCubicle(2, 2, COLORS[corner[(rotation + 1) % corner.length]], FACE_U);
   backColor = corner[(rotation + 2) % corner.length];
   SOLUTION_ID = COLOR_CSS[backColor] + "-button";
+}
+
+function nextQuizTimer(selected, solution, blinkNumber = 5, blinkDelayMs = 200) {
+  var timer;
+  function showSolution() {
+    solution.className = "correct";
+    if (selected != solution) {
+      selected.className = "wrong";
+    }
+  }
+  function dontShowSolution() {
+    BUTTONS.forEach(function (x) { x.className = ""; });
+  }
+  function f() {
+    if (blinkNumber == 0) {
+      clearInterval(timer);
+      nextQuiz();
+    }
+    else {
+      if (blinkNumber % 2) {
+        dontShowSolution();
+      }
+      else {
+        showSolution();
+      }
+      blinkNumber--;
+    }
+  }
+  showSolution();
+  timer = setInterval(f, blinkDelayMs);
 }
 
 function nextQuiz() {
