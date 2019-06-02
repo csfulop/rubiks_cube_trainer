@@ -4,18 +4,18 @@ var X = 40;
 var Y = 110;
 var SIDE = 50;
 var TRANSFORM_F_FACE = [
-  [1, 0],
-  [0, 1],
+  [SIDE, 0],
+  [0, SIDE],
   [X, Y]
 ];
 var TRANSFORM_U_FACE = [
-  [1, 0],
-  [0.5, -0.5],
+  [SIDE, 0],
+  [SIDE / 2, -SIDE / 2],
   [X, Y]
 ];
 var TRANSFORM_R_FACE = [
-  [0.5, -0.5],
-  [0, 1],
+  [SIDE / 2, -SIDE / 2],
+  [0, SIDE],
   [X + 3 * SIDE, Y]
 ];
 var FACE_R = 1;
@@ -130,9 +130,7 @@ function drawCubicle(x, y, color, face) {
   ctx.beginPath();
   ctx.lineWidth = "1";
   ctx.strokStyle = "black";
-  i = x * SIDE;
-  j = y * SIDE;
-  path = [[i, j], [i + SIDE, j], [i + SIDE, j + SIDE], [i, j + SIDE]];
+  path = [[x, y], [x + 1, y], [x + 1, y + 1], [x, y + 1]];
   transformedPath = path.map(function (v) { return mul(v, transform); });
   ctx.moveTo(transformedPath[0][0], transformedPath[0][1]);
   for (var i = 1; i < transformedPath.length; i++) {
