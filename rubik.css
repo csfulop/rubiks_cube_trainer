@@ -38,10 +38,12 @@ button {
 
 #buttons .correct {
   text-decoration: underline;
-  border: 3px solid lime;
+  border-color: transparent;
+  box-shadow: 0 0 0 3px lime;
 }
 
 #buttons .wrong {
   text-decoration: line-through;
-  border: 3px solid maroon;
+  border-color: transparent;
+  box-shadow: 0 0 0 3px maroon;
 }
