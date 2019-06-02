@@ -105,14 +105,15 @@ function showSolution(element) {
   }
   saveStats();
   updateStats();
-  if (timer) {
-    clearTimeout(timer);
-  }
   timer = setTimeout(nextQuiz, NEXT_QUIZ_DELAY_MS);
+  BUTTONS.forEach(function (x) { x.disabled = true; });
 }
 
 function resetButtons() {
-  BUTTONS.forEach(function (x) { x.className = ""; });
+  BUTTONS.forEach(function (x) {
+    x.className = "";
+    x.disabled = false;
+  });
 }
 
 function mul(vector, matrix) {
