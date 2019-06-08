@@ -3,28 +3,87 @@ var ctx = canvas.getContext("2d");
 var X = 40;
 var Y = 110;
 var SIDE = 50;
-var TRANSFORM_F_FACE = [
-  [SIDE, 0],
-  [0, SIDE],
-  [X, Y]
-];
-var TRANSFORM_U_FACE = [
-  [SIDE, 0],
-  [SIDE / 2, -SIDE / 2],
-  [X, Y]
-];
-var TRANSFORM_R_FACE = [
-  [SIDE / 2, -SIDE / 2],
-  [0, SIDE],
-  [X + 3 * SIDE, Y]
-];
+
+var VIEW_UPPER_RIGHT = 0;
+var VIEW_UPPER_LEFT = 1;
+var VIEW_BOTTOM_RIGHT = 2;
+var VIEW_BOTTOM_LEFT = 3;
+
 var FACE_R = 1;
 var FACE_U = 2;
 var FACE_F = 3;
+var FACE_L = 4;
+var FACE_D = 5;
+var FACE_B = 6;
+
+function upperRightTransforms() {
+  var TRANSFORM_F_FACE = [
+    [SIDE, 0],
+    [0, SIDE],
+    [X, Y]
+  ];
+  var TRANSFORM_U_FACE = [
+    [SIDE, 0],
+    [SIDE / 2, -SIDE / 2],
+    [X, Y]
+  ];
+  var TRANSFORM_R_FACE = [
+    [SIDE / 2, -SIDE / 2],
+    [0, SIDE],
+    [X + 3 * SIDE, Y]
+  ];
+  var TRANSFORMS = {};
+  TRANSFORMS[FACE_R] = TRANSFORM_R_FACE;
+  TRANSFORMS[FACE_U] = TRANSFORM_U_FACE;
+  TRANSFORMS[FACE_F] = TRANSFORM_F_FACE;
+  return TRANSFORMS;
+}
+
+function upperLeftTransforms() {
+  var TRANSFORM_F_FACE = [
+    [SIDE, 0],
+    [0, SIDE],
+    [X + 1.5 * SIDE, Y]
+  ];
+  var TRANSFORM_U_FACE = [
+    [SIDE, 0],
+    [-SIDE / 2, -SIDE / 2],
+    [X + 1.5 * SIDE, Y]
+  ];
+  var TRANSFORM_L_FACE = [
+    [-SIDE / 2, -SIDE / 2],
+    [0, SIDE],
+    [X+1.5*SIDE, Y]
+  ];
+  var TRANSFORMS = {};
+  TRANSFORMS[FACE_R] = TRANSFORM_L_FACE;
+  TRANSFORMS[FACE_U] = TRANSFORM_U_FACE;
+  TRANSFORMS[FACE_F] = TRANSFORM_F_FACE;
+  return TRANSFORMS;
+}
+
 var TRANSFORMS = {};
-TRANSFORMS[FACE_R] = TRANSFORM_R_FACE;
-TRANSFORMS[FACE_U] = TRANSFORM_U_FACE;
-TRANSFORMS[FACE_F] = TRANSFORM_F_FACE;
+TRANSFORMS[VIEW_UPPER_RIGHT] = upperRightTransforms();
+TRANSFORMS[VIEW_UPPER_LEFT] = upperLeftTransforms();
+
+VIEW = VIEW_UPPER_LEFT;
+
+function upperLeftQuizParams() {
+  return {
+    "side": {
+      "x": 2,
+      "y": 0,
+      "rotation": 1
+    },
+    "top": {
+      "x": 0,
+      "y": 2,
+      "rotation": 0
+    } 
+  };
+}
+var QUIZ_PARAMS = {};
+QUIZ_PARAMS[VIEW_UPPER_LEFT] = upperLeftQuizParams();
 
 var RED = 0;
 var ORANGE = 1;
@@ -53,6 +112,8 @@ var stats = { "total": 0, "correct": 0 };
 var BUTTONS = COLOR_CSS.map(function (x) { return document.getElementById(x + "-button"); });
 var NEXT_QUIZ_DELAY_MS = 1000;
 var timer;
+
+var SOLUTION_ID;
 
 function setCookie(cname, cvalue, exdays = 60) {
   var d = new Date();
@@ -126,7 +187,7 @@ function mul(vector, matrix) {
 }
 
 function drawCubicle(x, y, color, face) {
-  transform = TRANSFORMS[face];
+  transform = TRANSFORMS[VIEW][face];
   ctx.beginPath();
   ctx.lineWidth = "1";
   ctx.strokStyle = "black";
@@ -149,7 +210,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function drawGreyCube(params) {
+function drawGreyCube() {
   for (var x = 0; x < 3; x++) {
     for (var y = 0; y < 3; y++) {
       drawCubicle(x, y, COLORS[GREY], FACE_U);
@@ -160,11 +221,13 @@ function drawGreyCube(params) {
 }
 
 function generateQuiz() {
-  corner = CORNERS[getRandomInt(CORNERS.length)];
-  rotation = getRandomInt(corner.length);
-  drawCubicle(2, 0, COLORS[corner[rotation]], FACE_R);
-  drawCubicle(2, 2, COLORS[corner[(rotation + 1) % corner.length]], FACE_U);
-  backColor = corner[(rotation + 2) % corner.length];
+  var corner = CORNERS[getRandomInt(CORNERS.length)];
+  var rotation = getRandomInt(corner.length);
+  var sideParams = QUIZ_PARAMS[VIEW].side;
+  var topParams = QUIZ_PARAMS[VIEW].top;
+  drawCubicle(sideParams.x, sideParams.y, COLORS[corner[(rotation + sideParams.rotation) % corner.length]], FACE_R);
+  drawCubicle(topParams.x, topParams.y, COLORS[corner[(rotation + topParams.rotation) % corner.length]], FACE_U);
+  var backColor = corner[(rotation + 2) % corner.length];
   SOLUTION_ID = COLOR_CSS[backColor] + "-button";
 }
 
