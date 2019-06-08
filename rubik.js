@@ -9,12 +9,9 @@ var VIEW_UPPER_LEFT = 1;
 var VIEW_BOTTOM_RIGHT = 2;
 var VIEW_BOTTOM_LEFT = 3;
 
-var FACE_R = 1;
-var FACE_U = 2;
-var FACE_F = 3;
-var FACE_L = 4;
-var FACE_D = 5;
-var FACE_B = 6;
+var FACE_SIDE = 1;
+var FACE_TOP = 2;
+var FACE_FRONT = 3;
 
 function upperRightTransforms() {
   var TRANSFORM_F_FACE = [
@@ -33,9 +30,9 @@ function upperRightTransforms() {
     [X + 3 * SIDE, Y]
   ];
   var TRANSFORMS = {};
-  TRANSFORMS[FACE_R] = TRANSFORM_R_FACE;
-  TRANSFORMS[FACE_U] = TRANSFORM_U_FACE;
-  TRANSFORMS[FACE_F] = TRANSFORM_F_FACE;
+  TRANSFORMS[FACE_SIDE] = TRANSFORM_R_FACE;
+  TRANSFORMS[FACE_TOP] = TRANSFORM_U_FACE;
+  TRANSFORMS[FACE_FRONT] = TRANSFORM_F_FACE;
   return TRANSFORMS;
 }
 
@@ -53,12 +50,12 @@ function upperLeftTransforms() {
   var TRANSFORM_L_FACE = [
     [-SIDE / 2, -SIDE / 2],
     [0, SIDE],
-    [X+1.5*SIDE, Y]
+    [X + 1.5 * SIDE, Y]
   ];
   var TRANSFORMS = {};
-  TRANSFORMS[FACE_R] = TRANSFORM_L_FACE;
-  TRANSFORMS[FACE_U] = TRANSFORM_U_FACE;
-  TRANSFORMS[FACE_F] = TRANSFORM_F_FACE;
+  TRANSFORMS[FACE_SIDE] = TRANSFORM_L_FACE;
+  TRANSFORMS[FACE_TOP] = TRANSFORM_U_FACE;
+  TRANSFORMS[FACE_FRONT] = TRANSFORM_F_FACE;
   return TRANSFORMS;
 }
 
@@ -66,7 +63,26 @@ var TRANSFORMS = {};
 TRANSFORMS[VIEW_UPPER_RIGHT] = upperRightTransforms();
 TRANSFORMS[VIEW_UPPER_LEFT] = upperLeftTransforms();
 
-VIEW = VIEW_UPPER_LEFT;
+var VIEW;
+
+function setRandomView() {
+  VIEW = getRandomInt(2);
+}
+
+function upperRightQuizParams() {
+  return {
+    "side": {
+      "x": 2,
+      "y": 0,
+      "rotation": 0
+    },
+    "top": {
+      "x": 2,
+      "y": 2,
+      "rotation": 1
+    }
+  };
+}
 
 function upperLeftQuizParams() {
   return {
@@ -79,10 +95,12 @@ function upperLeftQuizParams() {
       "x": 0,
       "y": 2,
       "rotation": 0
-    } 
+    }
   };
 }
+
 var QUIZ_PARAMS = {};
+QUIZ_PARAMS[VIEW_UPPER_RIGHT] = upperRightQuizParams();
 QUIZ_PARAMS[VIEW_UPPER_LEFT] = upperLeftQuizParams();
 
 var RED = 0;
@@ -205,6 +223,10 @@ function drawCubicle(x, y, color, face) {
   }
 }
 
+/**
+ * get a random int in [0,max) interval
+ * @param {int} max
+ */
 function getRandomInt(max) {
   min = 0;
   return Math.floor(Math.random() * (max - min)) + min;
@@ -213,20 +235,23 @@ function getRandomInt(max) {
 function drawGreyCube() {
   for (var x = 0; x < 3; x++) {
     for (var y = 0; y < 3; y++) {
-      drawCubicle(x, y, COLORS[GREY], FACE_U);
-      drawCubicle(x, y, COLORS[GREY], FACE_F);
-      drawCubicle(x, y, COLORS[GREY], FACE_R);
+      drawCubicle(x, y, COLORS[GREY], FACE_TOP);
+      drawCubicle(x, y, COLORS[GREY], FACE_FRONT);
+      drawCubicle(x, y, COLORS[GREY], FACE_SIDE);
     }
   }
 }
 
 function generateQuiz() {
+  setRandomView();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawGreyCube();
   var corner = CORNERS[getRandomInt(CORNERS.length)];
   var rotation = getRandomInt(corner.length);
   var sideParams = QUIZ_PARAMS[VIEW].side;
   var topParams = QUIZ_PARAMS[VIEW].top;
-  drawCubicle(sideParams.x, sideParams.y, COLORS[corner[(rotation + sideParams.rotation) % corner.length]], FACE_R);
-  drawCubicle(topParams.x, topParams.y, COLORS[corner[(rotation + topParams.rotation) % corner.length]], FACE_U);
+  drawCubicle(sideParams.x, sideParams.y, COLORS[corner[(rotation + sideParams.rotation) % corner.length]], FACE_SIDE);
+  drawCubicle(topParams.x, topParams.y, COLORS[corner[(rotation + topParams.rotation) % corner.length]], FACE_TOP);
   var backColor = corner[(rotation + 2) % corner.length];
   SOLUTION_ID = COLOR_CSS[backColor] + "-button";
 }
@@ -267,5 +292,4 @@ function nextQuiz() {
 }
 
 loadStats();
-drawGreyCube();
 generateQuiz();
