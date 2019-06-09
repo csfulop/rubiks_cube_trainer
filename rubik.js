@@ -59,14 +59,38 @@ function upperLeftTransforms() {
   return TRANSFORMS;
 }
 
+function bottomRightTransforms() {
+  var TRANSFORM_F_FACE = [
+    [SIDE, 0],
+    [0, SIDE],
+    [X, Y - 1.5 * SIDE]
+  ];
+  var TRANSFORM_D_FACE = [
+    [SIDE, 0],
+    [SIDE / 2, SIDE / 2],
+    [X, Y + 1.5 * SIDE]
+  ];
+  var TRANSFORM_R_FACE = [
+    [SIDE / 2, SIDE / 2],
+    [0, SIDE],
+    [X + 3 * SIDE, Y - 1.5 * SIDE]
+  ];
+  var TRANSFORMS = {};
+  TRANSFORMS[FACE_SIDE] = TRANSFORM_R_FACE;
+  TRANSFORMS[FACE_TOP] = TRANSFORM_D_FACE;
+  TRANSFORMS[FACE_FRONT] = TRANSFORM_F_FACE;
+  return TRANSFORMS;
+}
+
 var TRANSFORMS = {};
 TRANSFORMS[VIEW_UPPER_RIGHT] = upperRightTransforms();
 TRANSFORMS[VIEW_UPPER_LEFT] = upperLeftTransforms();
+TRANSFORMS[VIEW_BOTTOM_RIGHT] = bottomRightTransforms();
 
 var VIEW;
 
 function setRandomView() {
-  VIEW = getRandomInt(2);
+  VIEW = getRandomInt(3);
 }
 
 function upperRightQuizParams() {
@@ -99,9 +123,25 @@ function upperLeftQuizParams() {
   };
 }
 
+function bottomRightQuizParams() {
+  return {
+    "side": {
+      "x": 2,
+      "y": 2,
+      "rotation": 1
+    },
+    "top": {
+      "x": 2,
+      "y": 2,
+      "rotation": 0
+    }
+  };
+}
+
 var QUIZ_PARAMS = {};
 QUIZ_PARAMS[VIEW_UPPER_RIGHT] = upperRightQuizParams();
 QUIZ_PARAMS[VIEW_UPPER_LEFT] = upperLeftQuizParams();
+QUIZ_PARAMS[VIEW_BOTTOM_RIGHT] = bottomRightQuizParams();
 
 var RED = 0;
 var ORANGE = 1;
