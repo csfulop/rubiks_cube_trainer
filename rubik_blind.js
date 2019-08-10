@@ -110,8 +110,8 @@ function drawGreyCube() {
       drawCubicle(x, y, COLORS[WHITE], FACE_D);
       drawCubicle(x, y, COLORS[RED], FACE_F);
       drawCubicle(x, y, COLORS[ORANGE], FACE_B);
-      drawCubicle(x, y, COLORS[BLUE], FACE_R);
-      drawCubicle(x, y, COLORS[GREEN], FACE_L);
+      drawCubicle(x, y, COLORS[GREEN], FACE_R);
+      drawCubicle(x, y, COLORS[BLUE], FACE_L);
     }
   }
 }
