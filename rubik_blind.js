@@ -12,49 +12,36 @@ var FACE_R = 3;
 var FACE_B = 4;
 var FACE_D = 5;
 
-FACE_U_X = X + 2 * SIDE + 1 * BORDER;
-FACE_U_Y = Y;
-FACE_D_X = X + 2 * SIDE + 1 * BORDER;
-FACE_D_Y = Y + 4 * SIDE + 2 * BORDER;
-FACE_F_X = X + 2 * SIDE + 1 * BORDER;
-FACE_F_Y = Y + 2 * SIDE + 1 * BORDER;
-FACE_B_X = X + 6 * SIDE + 3 * BORDER;
-FACE_B_Y = Y + 2 * SIDE + 1 * BORDER;
-FACE_L_X = X;
-FACE_L_Y = Y + 2 * SIDE + 1 * BORDER;
-FACE_R_X = X + 4 * SIDE + 2 * BORDER;
-FACE_R_Y = Y + 2 * SIDE + 1 * BORDER;
-
 var TRANSFORMS = {};
 var TRANSFORM_U_FACE = [
   [SIDE, 0],
   [0, SIDE],
-  [FACE_U_X, FACE_U_Y]
+  [X + 2 * SIDE + 1 * BORDER, Y]
 ];
 var TRANSFORM_D_FACE = [
   [SIDE, 0],
   [0, SIDE],
-  [FACE_D_X, FACE_D_Y]
+  [X + 2 * SIDE + 1 * BORDER, Y + 4 * SIDE + 2 * BORDER]
 ];
 var TRANSFORM_F_FACE = [
   [SIDE, 0],
   [0, SIDE],
-  [FACE_F_X, FACE_F_Y]
+  [X + 2 * SIDE + 1 * BORDER, Y + 2 * SIDE + 1 * BORDER]
 ];
 var TRANSFORM_B_FACE = [
   [SIDE, 0],
   [0, SIDE],
-  [FACE_B_X, FACE_B_Y]
+  [X + 6 * SIDE + 3 * BORDER, Y + 2 * SIDE + 1 * BORDER]
 ];
 var TRANSFORM_L_FACE = [
   [SIDE, 0],
   [0, SIDE],
-  [FACE_L_X, FACE_L_Y]
+  [X, Y + 2 * SIDE + 1 * BORDER]
 ];
 var TRANSFORM_R_FACE = [
   [SIDE, 0],
   [0, SIDE],
-  [FACE_R_X, FACE_R_Y]
+  [X + 4 * SIDE + 2 * BORDER, Y + 2 * SIDE + 1 * BORDER]
 ];
 var TRANSFORMS = {};
 TRANSFORMS[FACE_U] = TRANSFORM_U_FACE;
