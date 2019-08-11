@@ -14,6 +14,11 @@
             top: 0px;
             left: 0px;
         }
+
+        #answerBox {
+            position: fixed;
+            bottom: 10px;
+        }
     </style>
 </head>
 
@@ -25,6 +30,11 @@
             Your browser does not support the canvas element.
         </canvas>
         <div id="questionmark">?</div>
+        <div id="answerBox">
+            <p>
+                The name of the marked face: <input id="answer" />
+            </p>
+        </div>
     </div>
 
     <script type="text/javascript" src="rubik_blind.js"></script>

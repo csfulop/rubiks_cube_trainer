@@ -5,10 +5,10 @@ var Y = 10;
 var SIDE = 50;
 var BORDER = 5;
 
-var FACE_F = 0;
-var FACE_U = 1;
-var FACE_R = 2;
-var FACE_L = 3;
+var FACE_U = 0;
+var FACE_L = 1;
+var FACE_F = 2;
+var FACE_R = 3;
 var FACE_B = 4;
 var FACE_D = 5;
 
@@ -75,6 +75,7 @@ var GREY = 6;
 var COLORS = ["red", "orange", "blue", "green", "white", "yellow", "grey"];
 
 var QUESTION;
+var ANSWER = "abdcefhgijlkmnpoqrtsuvxw";
 
 function mul(vector, matrix) {
   vector.push(1);
@@ -144,11 +145,17 @@ function moveQuestionmark() {
   document.getElementById("questionmark").style.visibility = "visible";
 }
 
+function showAnswer() {
+  answer = ANSWER.charAt(QUESTION).toUpperCase();
+  document.getElementById("answer").value = answer;
+}
+
 function generateQuiz() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawFlattenedCube();
   QUESTION = getRandomInt(6 * 4);
   moveQuestionmark();
+  showAnswer();
 }
 
 generateQuiz();
