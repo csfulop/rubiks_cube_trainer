@@ -132,9 +132,13 @@ function moveQuestionmark() {
   document.getElementById("questionmark").style.visibility = "visible";
 }
 
-function showAnswer() {
-  answer = ANSWER.charAt(QUESTION).toUpperCase();
-  document.getElementById("answer").value = answer;
+function checkAnswer(guess) {
+  answer = ANSWER.charAt(QUESTION);
+  if (guess.toUpperCase() === answer.toUpperCase()) {
+    document.getElementById("answer").innerHTML = answer + " OK";
+  } else {
+    document.getElementById("answer").innerHTML = answer + " NOK";
+  }
 }
 
 function generateQuiz() {
@@ -142,7 +146,13 @@ function generateQuiz() {
   drawFlattenedCube();
   QUESTION = getRandomInt(6 * 4);
   moveQuestionmark();
-  showAnswer();
 }
 
 generateQuiz();
+
+document.addEventListener("keypress", keyDownTextField, false);
+
+function keyDownTextField(e) {
+  console.log("guess: %s", e.key);
+  checkAnswer(e.key);
+}
