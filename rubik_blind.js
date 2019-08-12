@@ -63,6 +63,7 @@ var COLORS = ["red", "orange", "blue", "green", "white", "yellow", "grey"];
 
 var QUESTION;
 var ANSWER = "abdcefhgijlkmnpoqrtsuvxw";
+var guessed = false;
 
 function mul(vector, matrix) {
   vector.push(1);
@@ -133,12 +134,46 @@ function moveQuestionmark() {
 }
 
 function checkAnswer(guess) {
-  answer = ANSWER.charAt(QUESTION);
-  if (guess.toUpperCase() === answer.toUpperCase()) {
-    document.getElementById("answer").innerHTML = answer + " OK";
+  answer = ANSWER.charAt(QUESTION).toUpperCase();
+  if (guess.toUpperCase() === answer) {
+    document.getElementById("answer").innerHTML = answer;
+    nextQuizTimer(true);
   } else {
-    document.getElementById("answer").innerHTML = answer + " NOK";
+    document.getElementById("answer").innerHTML = answer;
+    nextQuizTimer(false);
   }
+}
+
+function nextQuizTimer(ok, blinkNumber = 5, blinkDelayMs = 200) {
+  var timer;
+  answer = document.getElementById("answer")
+  function showSolution() {
+    if (ok) {
+      answer.className = "correct";
+    } else {
+      answer.className = "wrong";
+    }
+  }
+  function dontShowSolution() {
+    answer.className = "";
+  }
+  function f() {
+    if (blinkNumber == 0) {
+      clearInterval(timer);
+      nextQuiz();
+    }
+    else {
+      if (blinkNumber % 2) {
+        dontShowSolution();
+      }
+      else {
+        showSolution();
+      }
+      blinkNumber--;
+    }
+  }
+  showSolution();
+  timer = setInterval(f, blinkDelayMs);
 }
 
 function generateQuiz() {
@@ -148,11 +183,21 @@ function generateQuiz() {
   moveQuestionmark();
 }
 
+function nextQuiz() {
+  generateQuiz();
+  document.getElementById("answer").innerHTML = "&lt;press key&gt;"
+  guessed = false;
+}
+
 generateQuiz();
 
 document.addEventListener("keypress", keyDownTextField, false);
 
 function keyDownTextField(e) {
+  if (guessed) {
+    return;
+  }
+  guessed = true;
   console.log("guess: %s", e.key);
   checkAnswer(e.key);
 }
