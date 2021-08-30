@@ -1,0 +1,179 @@
+body {
+  --cell-size: 100px;
+  --border-size: 15px;
+}
+
+#cube {
+  display: grid;
+  grid-template-columns: var(--border-size) var(--cell-size) var(--cell-size) var(--cell-size) var(--border-size);
+  grid-template-rows: var(--border-size) var(--cell-size) var(--cell-size) var(--cell-size) var(--border-size);
+}
+
+/* ------------------------------ C E L L S ------------------------------ */
+
+#cell11 {
+  grid-column: 2 / span 1;
+  grid-row: 2 / span 1;
+}
+
+#cell21 {
+  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+}
+
+#cell31 {
+  grid-column: 2 / span 1;
+  grid-row: 4 / span 1;
+}
+
+#cell12 {
+  grid-column: 3 / span 1;
+  grid-row: 2 / span 1;
+}
+
+#cell22 {
+  grid-column: 3 / span 1;
+  grid-row: 3 / span 1;
+}
+
+#cell32 {
+  grid-column: 3 / span 1;
+  grid-row: 4 / span 1;
+}
+
+#cell13 {
+  grid-column: 4 / span 1;
+  grid-row: 2 / span 1;
+}
+
+#cell23 {
+  grid-column: 4 / span 1;
+  grid-row: 3 / span 1;
+}
+
+#cell33 {
+  grid-column: 4 / span 1;
+  grid-row: 4 / span 1;
+}
+
+
+/* ---------------------- N O R T H   B O R D E R S  ---------------------- */
+
+#cell11n {
+  grid-column: 2 / span 1;
+  grid-row: 1 / span 1;
+}
+
+#cell12n {
+  grid-column: 3 / span 1;
+  grid-row: 1 / span 1;
+}
+
+#cell13n {
+  grid-column: 4 / span 1;
+  grid-row: 1 / span 1;
+}
+
+/* ---------------------- S O U T H   B O R D E R S  ---------------------- */
+
+#cell31s {
+  grid-column: 2 / span 1;
+  grid-row: 5 / span 1;
+}
+
+#cell32s {
+  grid-column: 3 / span 1;
+  grid-row: 5 / span 1;
+}
+
+#cell33s {
+  grid-column: 4 / span 1;
+  grid-row: 5 / span 1;
+}
+
+/* ---------------------- W E S T   B O R D E R S  ---------------------- */
+
+#cell11w {
+  grid-column: 1 / span 1;
+  grid-row: 2 / span 1;
+}
+
+#cell21w {
+  grid-column: 1 / span 1;
+  grid-row: 3 / span 1;
+}
+
+#cell31w {
+  grid-column: 1 / span 1;
+  grid-row: 4 / span 1;
+}
+
+/* ---------------------- E A S T   B O R D E R S  ---------------------- */
+
+#cell13e {
+  grid-column: 5 / span 1;
+  grid-row: 2 / span 1;
+}
+
+#cell23e {
+  grid-column: 5 / span 1;
+  grid-row: 3 / span 1;
+}
+
+#cell33e {
+  grid-column: 5 / span 1;
+  grid-row: 4 / span 1;
+}
+
+/* ------------------------ C E L L   C O L O R S  ------------------------ */
+
+.white {
+  background-color: white;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.green {
+  background-color: green;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.red {
+  background-color: red;
+}
+
+.orange {
+  background-color: orange;
+}
+
+.ignored {
+  background-color: lightgray;
+}
+
+/* ------------------------------------------------------------------------ */
+
+.cell {
+  display: inline-block;
+  margin: 2px;
+  padding: 0px;
+  border: 1px solid grey;
+}
+
+.hborder {
+  margin: 2px;
+  border: 1px solid grey;
+}
+
+.vborder {
+  margin: 2px;
+  border: 1px solid grey;
+}
+
+.moveButton, .algButton {
+  padding: 2px;
+}
