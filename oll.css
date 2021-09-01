@@ -177,3 +177,7 @@ body {
 .moveButton, .algButton {
   padding: 2px;
 }
+
+#searchInProgress {
+  display: none;
+}

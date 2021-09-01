@@ -439,9 +439,9 @@ function setCss(cube) {
 }
 
 function updatePattern() {
-  let pattern=getPattern(cube);
-  let name='unknown';
-  if(PATTERNS.has(pattern)) {
+  let pattern = getPattern(cube);
+  let name = 'unknown';
+  if (PATTERNS.has(pattern)) {
     name = PATTERNS.get(pattern);
   }
   $('#pattern').text(name);
@@ -498,13 +498,13 @@ function fillAlgs() {
     let div = $('<button/>', {
       class: 'algButton',
       text: key,
-      click: function () {doAlg(key,value);}
+      click: function () { doAlg(key, value); }
     });
     $('#algs').append(div);
     let how = $('<button/>', {
       class: 'howButton',
       text: key,
-      click: function () {findAlg(key);}
+      click: function () { startFindAlg(key); }
     });
     $('#howToSetUp').append(how);
   });
@@ -519,24 +519,30 @@ function doAlg(name, algo) {
   }
 }
 
-function findAlg(name) {
-  // FIXME: async function???
+function startFindAlg(name) {
   console.log(`findAlg(${name})`);
 
+  $('#searchInProgress').show();
   $('#howToSetUpResult').empty();
-  STEPS=0
-  
-  function find(cube,result) {
+  $('#howToSetUpTarget').text(name);
+
+  setTimeout(() => findAlg(name), 100);
+}
+
+function findAlg(name) {
+  STEPS = 0
+
+  function find(cube, result) {
     STEPS++;
-    if(STEPS%1000==0) {
+    if (STEPS % 1000 == 0) {
       console.log(STEPS);
     }
-    if(result.length===2) {
+    if (result.length === 2) {
       return;
     }
     ALGS.forEach((value, key) => {
-      let c2 = alg(cube,value);
-      let result2 = [...result,key];
+      let c2 = alg(cube, value);
+      let result2 = [...result, key];
       let pattern = getPattern(c2);
       if (PATTERNS.get(pattern) === name) {
         $('#howToSetUpResult').append(
@@ -546,14 +552,16 @@ function findAlg(name) {
         );
       } else {
         // FIXME: add U turns
-        find(c2,result2);
+        find(c2, result2);
       }
     });
   }
-  
+
   cube = newCube();
-  find(cube,[]);
+  find(cube, []);
   console.log('Finished!');
+
+  $('#searchInProgress').hide();
 }
 
 function fillPatterns() {
@@ -585,7 +593,7 @@ function getPattern(cube) {
     result.push(isColor(cube[5][0][i]));
     result.push(isColor(cube[4][0][2 - i]));
   });
-  return _.sum(result.map((e,i)=>e*2**i));
+  return _.sum(result.map((e, i) => e * 2 ** i));
 }
 
 function fillMiscButtons() {
