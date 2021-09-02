@@ -504,7 +504,7 @@ function fillAlgs() {
     let how = $('<button/>', {
       class: 'howButton',
       text: key,
-      click: function () { startFindAlg(key); }
+      click: function () { findAlg(key); }
     });
     $('#howToSetUp').append(how);
   });
@@ -519,17 +519,13 @@ function doAlg(name, algo) {
   }
 }
 
-function startFindAlg(name) {
+function findAlg(name) {
   console.log(`findAlg(${name})`);
 
   $('#searchInProgress').show();
   $('#howToSetUpResult').empty();
   $('#howToSetUpTarget').text(name);
 
-  setTimeout(() => findAlg(name), 100);
-}
-
-function findAlg(name) {
   STEPS = 0
 
   function find(cube, result) {
@@ -537,7 +533,7 @@ function findAlg(name) {
     if (STEPS % 1000 == 0) {
       console.log(STEPS);
     }
-    if (result.length === 2) {
+    if (result.length >= 3) {
       return;
     }
     ALGS.forEach((value, key) => {
@@ -545,23 +541,31 @@ function findAlg(name) {
       let result2 = [...result, key];
       let pattern = getPattern(c2);
       if (PATTERNS.get(pattern) === name) {
+        // FIXME: filter I out from result
         $('#howToSetUpResult').append(
           $('<div/>', {
             text: result2
           })
         );
+        console.log(result2);
       } else {
-        // FIXME: add U turns
-        find(c2, result2);
+        addU(c2, result2);
       }
     });
   }
 
-  cube = newCube();
-  find(cube, []);
-  console.log('Finished!');
+  function addU(cube,result) {
+    [I,U,UP,U2].forEach(uTurn=>{
+      find(uTurn(cube),[...result,uTurn.name])
+    });
+  }
 
-  $('#searchInProgress').hide();
+  cube = newCube();
+  setTimeout(() => {
+    find(cube, []);
+    $('#searchInProgress').hide();
+    console.log('Finished!');
+  }, 100);
 }
 
 function fillPatterns() {
