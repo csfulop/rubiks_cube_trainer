@@ -62,6 +62,10 @@ let MOVES = new Map([
   ["MP", MP],
   ["M2", M2],
   ["M2P", M2],
+  ["S", S],
+  ["SP", SP],
+  ["S2", S2],
+  ["S2P", S2],
   ["X", X],
   ["XP", XP],
   ["X2", X2],
@@ -366,6 +370,18 @@ function M2(cube) {
   return double(cube, M);
 }
 
+function S(cube) {
+  return alg(cube, [Y, R, rP, YP]);
+}
+
+function SP(cube) {
+  return prime(cube, S);
+}
+
+function S2(cube) {
+  return double(cube, S);
+}
+
 function alg(cube, moves) {
   if (!(moves instanceof Array)) {
     moves = parseAlg(moves);
@@ -552,11 +568,15 @@ function findAlg(name) {
         addU(c2, result2);
       }
     });
+    // FIXME: iterative alg for searching:
+    // FIXME: collect step lambdas into list, extend list with new states from the steps
+    // FIXME: clean up when the list is empty
+    // FIXME: check stop button state in steps and stop the iteration
   }
 
   function addU(cube,result) {
     [I,U,UP,U2].forEach(uTurn=>{
-      find(uTurn(cube),[...result,uTurn.name])
+      find(uTurn(cube),[...result,uTurn.name]);
     });
   }
 
